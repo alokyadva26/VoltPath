@@ -43,6 +43,9 @@ def calculate_route(data: RouteRequest):
         "vehicle": vehicle["name"],
         "distance_km": distance_km,
         "remaining_soc": remaining_soc,
+        "geometry": {
+            "coordinates": route_data["geometry"]
+        },
         "chargers_along_route": chargers,
         "charging_plan": charging_plan
     }
