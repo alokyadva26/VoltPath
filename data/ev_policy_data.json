@@ -1,0 +1,482 @@
+{
+  "Delhi": {
+    "evs_registered": 330000,
+    "active_chargers": 1200,
+    "desert_zones": 47,
+    "growth_pct": 18,
+    "charger_growth": 340,
+    "priority_zones": [
+      {"zone": "Dwarka Sector 21", "score": 97, "evs": "18.2K", "roi": "★★★★★"},
+      {"zone": "Cyber City", "score": 94, "evs": "16.8K", "roi": "★★★★★"},
+      {"zone": "Noida Sector 62", "score": 89, "evs": "14.1K", "roi": "★★★★"},
+      {"zone": "Faridabad NH48", "score": 82, "evs": "11.3K", "roi": "★★★★"},
+      {"zone": "Rohini Sector 3", "score": 77, "evs": "9.6K", "roi": "★★★"}
+    ],
+    "hourly_demand": [30,18,14,20,38,55,70,68,52,45,60,90,100,88,72,65,78,95,100,88,70,55,42,32]
+  },
+  "Maharashtra": {
+    "evs_registered": 520000,
+    "active_chargers": 1850,
+    "desert_zones": 62,
+    "growth_pct": 22,
+    "charger_growth": 480,
+    "priority_zones": [
+      {"zone": "BKC Mumbai", "score": 98, "evs": "24.5K", "roi": "★★★★★"},
+      {"zone": "Hinjewadi Pune", "score": 95, "evs": "19.2K", "roi": "★★★★★"},
+      {"zone": "Navi Mumbai Vashi", "score": 91, "evs": "16.7K", "roi": "★★★★★"},
+      {"zone": "Thane Ghodbunder", "score": 86, "evs": "13.4K", "roi": "★★★★"},
+      {"zone": "Nagpur Wardha Rd", "score": 74, "evs": "8.1K", "roi": "★★★"}
+    ],
+    "hourly_demand": [25,15,12,18,35,58,75,72,55,48,65,92,100,90,74,68,80,96,100,90,72,58,44,30]
+  },
+  "Karnataka": {
+    "evs_registered": 410000,
+    "active_chargers": 1450,
+    "desert_zones": 38,
+    "growth_pct": 25,
+    "charger_growth": 410,
+    "priority_zones": [
+      {"zone": "Whitefield Bengaluru", "score": 96, "evs": "21.3K", "roi": "★★★★★"},
+      {"zone": "Electronic City", "score": 93, "evs": "18.6K", "roi": "★★★★★"},
+      {"zone": "Hebbal ORR", "score": 88, "evs": "14.9K", "roi": "★★★★"},
+      {"zone": "Mysuru Ring Rd", "score": 79, "evs": "9.8K", "roi": "★★★★"},
+      {"zone": "Hubli-Dharwad NH4", "score": 68, "evs": "6.2K", "roi": "★★★"}
+    ],
+    "hourly_demand": [28,16,13,19,36,52,68,70,54,46,62,88,98,86,70,64,76,92,98,86,68,54,40,30]
+  },
+  "Tamil Nadu": {
+    "evs_registered": 380000,
+    "active_chargers": 1100,
+    "desert_zones": 55,
+    "growth_pct": 20,
+    "charger_growth": 290,
+    "priority_zones": [
+      {"zone": "OMR Chennai", "score": 95, "evs": "19.8K", "roi": "★★★★★"},
+      {"zone": "Coimbatore Avinashi", "score": 88, "evs": "13.2K", "roi": "★★★★"},
+      {"zone": "Tambaram GST Rd", "score": 84, "evs": "11.5K", "roi": "★★★★"},
+      {"zone": "Madurai NH7", "score": 76, "evs": "8.4K", "roi": "★★★"},
+      {"zone": "Trichy Bypass", "score": 70, "evs": "6.8K", "roi": "★★★"}
+    ],
+    "hourly_demand": [22,14,11,17,32,50,65,68,50,44,58,85,95,84,68,62,74,90,95,84,66,52,38,26]
+  },
+  "Gujarat": {
+    "evs_registered": 290000,
+    "active_chargers": 980,
+    "desert_zones": 42,
+    "growth_pct": 28,
+    "charger_growth": 320,
+    "priority_zones": [
+      {"zone": "GIFT City Gandhinagar", "score": 94, "evs": "16.5K", "roi": "★★★★★"},
+      {"zone": "SG Highway Ahmedabad", "score": 91, "evs": "14.8K", "roi": "★★★★★"},
+      {"zone": "Surat Ring Rd", "score": 85, "evs": "11.2K", "roi": "★★★★"},
+      {"zone": "Vadodara Express", "score": 78, "evs": "8.6K", "roi": "★★★★"},
+      {"zone": "Rajkot Bypass", "score": 68, "evs": "5.9K", "roi": "★★★"}
+    ],
+    "hourly_demand": [20,12,10,15,30,48,62,65,48,42,55,82,92,80,66,60,72,88,92,80,64,50,36,24]
+  },
+  "Telangana": {
+    "evs_registered": 310000,
+    "active_chargers": 1050,
+    "desert_zones": 35,
+    "growth_pct": 30,
+    "charger_growth": 380,
+    "priority_zones": [
+      {"zone": "HITEC City", "score": 97, "evs": "20.1K", "roi": "★★★★★"},
+      {"zone": "Gachibowli ORR", "score": 93, "evs": "17.4K", "roi": "★★★★★"},
+      {"zone": "Shamshabad Airport", "score": 86, "evs": "12.6K", "roi": "★★★★"},
+      {"zone": "Secunderabad Parade", "score": 80, "evs": "9.8K", "roi": "★★★★"},
+      {"zone": "Warangal NH163", "score": 66, "evs": "5.4K", "roi": "★★★"}
+    ],
+    "hourly_demand": [26,15,12,18,34,54,70,72,54,47,63,90,100,88,72,66,78,94,100,88,70,56,42,28]
+  },
+  "Uttar Pradesh": {
+    "evs_registered": 480000,
+    "active_chargers": 890,
+    "desert_zones": 110,
+    "growth_pct": 15,
+    "charger_growth": 210,
+    "priority_zones": [
+      {"zone": "Noida Expressway", "score": 92, "evs": "22.4K", "roi": "★★★★★"},
+      {"zone": "Lucknow Gomti Nagar", "score": 86, "evs": "14.6K", "roi": "★★★★"},
+      {"zone": "Agra-Lucknow Exp", "score": 78, "evs": "9.4K", "roi": "★★★★"},
+      {"zone": "Varanasi Ring Rd", "score": 70, "evs": "7.1K", "roi": "★★★"},
+      {"zone": "Kanpur GT Rd", "score": 64, "evs": "5.8K", "roi": "★★★"}
+    ],
+    "hourly_demand": [18,10,8,14,28,45,60,62,46,40,52,78,88,76,62,56,68,84,88,76,60,46,34,22]
+  },
+  "Rajasthan": {
+    "evs_registered": 180000,
+    "active_chargers": 520,
+    "desert_zones": 78,
+    "growth_pct": 16,
+    "charger_growth": 150,
+    "priority_zones": [
+      {"zone": "Jaipur Tonk Rd", "score": 90, "evs": "12.8K", "roi": "★★★★★"},
+      {"zone": "Jodhpur Bypass", "score": 80, "evs": "8.2K", "roi": "★★★★"},
+      {"zone": "Udaipur NH8", "score": 74, "evs": "6.5K", "roi": "★★★"},
+      {"zone": "Kota Bypass", "score": 68, "evs": "5.1K", "roi": "★★★"},
+      {"zone": "Bikaner NH11", "score": 58, "evs": "3.2K", "roi": "★★"}
+    ],
+    "hourly_demand": [16,9,7,12,25,42,55,58,42,36,48,72,82,70,58,52,62,78,82,70,56,42,30,20]
+  },
+  "Kerala": {
+    "evs_registered": 220000,
+    "active_chargers": 780,
+    "desert_zones": 28,
+    "growth_pct": 24,
+    "charger_growth": 260,
+    "priority_zones": [
+      {"zone": "Kochi Infopark", "score": 93, "evs": "14.6K", "roi": "★★★★★"},
+      {"zone": "Trivandrum Technopark", "score": 88, "evs": "11.8K", "roi": "★★★★"},
+      {"zone": "Calicut Bypass", "score": 80, "evs": "8.4K", "roi": "★★★★"},
+      {"zone": "Thrissur NH544", "score": 74, "evs": "6.8K", "roi": "★★★"},
+      {"zone": "Kannur Town", "score": 66, "evs": "4.5K", "roi": "★★★"}
+    ],
+    "hourly_demand": [24,14,11,16,32,50,66,68,52,45,60,86,96,84,68,62,74,90,96,84,66,52,38,26]
+  },
+  "West Bengal": {
+    "evs_registered": 260000,
+    "active_chargers": 680,
+    "desert_zones": 65,
+    "growth_pct": 14,
+    "charger_growth": 180,
+    "priority_zones": [
+      {"zone": "Salt Lake Kolkata", "score": 91, "evs": "15.2K", "roi": "★★★★★"},
+      {"zone": "New Town Rajarhat", "score": 87, "evs": "12.8K", "roi": "★★★★"},
+      {"zone": "Howrah Bridge Area", "score": 78, "evs": "8.6K", "roi": "★★★★"},
+      {"zone": "Durgapur Exp", "score": 70, "evs": "6.2K", "roi": "★★★"},
+      {"zone": "Siliguri NH10", "score": 60, "evs": "3.8K", "roi": "★★★"}
+    ],
+    "hourly_demand": [20,12,9,15,28,46,60,62,46,40,54,80,90,78,64,58,70,86,90,78,62,48,36,22]
+  },
+  "Madhya Pradesh": {
+    "evs_registered": 150000,
+    "active_chargers": 420,
+    "desert_zones": 88,
+    "growth_pct": 12,
+    "charger_growth": 120,
+    "priority_zones": [
+      {"zone": "Bhopal BHEL Area", "score": 86, "evs": "10.4K", "roi": "★★★★"},
+      {"zone": "Indore AB Rd", "score": 82, "evs": "9.1K", "roi": "★★★★"},
+      {"zone": "Gwalior NH3", "score": 72, "evs": "6.2K", "roi": "★★★"},
+      {"zone": "Jabalpur Bypass", "score": 66, "evs": "4.8K", "roi": "★★★"},
+      {"zone": "Ujjain NH52", "score": 58, "evs": "3.1K", "roi": "★★"}
+    ],
+    "hourly_demand": [14,8,6,11,22,38,52,54,40,34,46,68,78,66,54,48,58,74,78,66,52,40,28,18]
+  },
+  "Punjab": {
+    "evs_registered": 170000,
+    "active_chargers": 480,
+    "desert_zones": 52,
+    "growth_pct": 17,
+    "charger_growth": 140,
+    "priority_zones": [
+      {"zone": "Mohali IT City", "score": 89, "evs": "11.6K", "roi": "★★★★"},
+      {"zone": "Ludhiana NH1", "score": 82, "evs": "8.8K", "roi": "★★★★"},
+      {"zone": "Amritsar GT Rd", "score": 76, "evs": "7.2K", "roi": "★★★"},
+      {"zone": "Jalandhar Bypass", "score": 70, "evs": "5.6K", "roi": "★★★"},
+      {"zone": "Patiala NH1", "score": 62, "evs": "4.0K", "roi": "★★★"}
+    ],
+    "hourly_demand": [18,10,8,13,26,44,58,60,44,38,50,76,86,74,60,54,66,82,86,74,58,44,32,20]
+  },
+  "Haryana": {
+    "evs_registered": 200000,
+    "active_chargers": 620,
+    "desert_zones": 45,
+    "growth_pct": 19,
+    "charger_growth": 190,
+    "priority_zones": [
+      {"zone": "Gurgaon Expressway", "score": 95, "evs": "16.2K", "roi": "★★★★★"},
+      {"zone": "Faridabad Sec 21", "score": 88, "evs": "12.4K", "roi": "★★★★"},
+      {"zone": "Panipat GT Rd", "score": 76, "evs": "7.8K", "roi": "★★★★"},
+      {"zone": "Hisar NH9", "score": 68, "evs": "5.4K", "roi": "★★★"},
+      {"zone": "Rohtak NH10", "score": 60, "evs": "3.6K", "roi": "★★★"}
+    ],
+    "hourly_demand": [22,13,10,16,30,50,64,66,50,44,58,84,94,82,68,62,74,90,94,82,66,52,38,24]
+  },
+  "Bihar": {
+    "evs_registered": 120000,
+    "active_chargers": 280,
+    "desert_zones": 120,
+    "growth_pct": 10,
+    "charger_growth": 80,
+    "priority_zones": [
+      {"zone": "Patna Bailey Rd", "score": 82, "evs": "8.4K", "roi": "★★★★"},
+      {"zone": "Gaya NH2", "score": 72, "evs": "5.6K", "roi": "★★★"},
+      {"zone": "Muzaffarpur NH28", "score": 66, "evs": "4.2K", "roi": "★★★"},
+      {"zone": "Bhagalpur NH80", "score": 58, "evs": "3.0K", "roi": "★★"},
+      {"zone": "Darbhanga NH57", "score": 50, "evs": "2.1K", "roi": "★★"}
+    ],
+    "hourly_demand": [12,7,5,9,20,34,48,50,36,30,42,64,74,62,50,44,54,70,74,62,48,36,24,16]
+  },
+  "Odisha": {
+    "evs_registered": 95000,
+    "active_chargers": 310,
+    "desert_zones": 72,
+    "growth_pct": 13,
+    "charger_growth": 90,
+    "priority_zones": [
+      {"zone": "Bhubaneswar NH16", "score": 84, "evs": "7.8K", "roi": "★★★★"},
+      {"zone": "Cuttack Ring Rd", "score": 76, "evs": "5.6K", "roi": "★★★"},
+      {"zone": "Rourkela NH23", "score": 68, "evs": "4.0K", "roi": "★★★"},
+      {"zone": "Puri NH316", "score": 62, "evs": "3.2K", "roi": "★★★"},
+      {"zone": "Sambalpur NH53", "score": 54, "evs": "2.4K", "roi": "★★"}
+    ],
+    "hourly_demand": [14,8,6,10,22,38,50,52,38,32,44,66,76,64,52,46,56,72,76,64,50,38,26,16]
+  },
+  "Assam": {
+    "evs_registered": 65000,
+    "active_chargers": 180,
+    "desert_zones": 85,
+    "growth_pct": 11,
+    "charger_growth": 50,
+    "priority_zones": [
+      {"zone": "Guwahati GS Rd", "score": 80, "evs": "6.2K", "roi": "★★★★"},
+      {"zone": "Dibrugarh NH37", "score": 68, "evs": "3.8K", "roi": "★★★"},
+      {"zone": "Silchar NH6", "score": 60, "evs": "2.8K", "roi": "★★★"},
+      {"zone": "Jorhat AT Rd", "score": 54, "evs": "2.0K", "roi": "★★"},
+      {"zone": "Tezpur NH15", "score": 48, "evs": "1.6K", "roi": "★★"}
+    ],
+    "hourly_demand": [10,6,4,8,18,30,42,44,32,26,36,56,66,54,44,38,48,62,66,54,42,32,22,14]
+  },
+  "Jharkhand": {
+    "evs_registered": 85000,
+    "active_chargers": 240,
+    "desert_zones": 76,
+    "growth_pct": 12,
+    "charger_growth": 70,
+    "priority_zones": [
+      {"zone": "Ranchi Ring Rd", "score": 78, "evs": "6.8K", "roi": "★★★★"},
+      {"zone": "Jamshedpur NH33", "score": 74, "evs": "5.4K", "roi": "★★★"},
+      {"zone": "Dhanbad GT Rd", "score": 66, "evs": "3.8K", "roi": "★★★"},
+      {"zone": "Bokaro NH32", "score": 58, "evs": "2.6K", "roi": "★★"},
+      {"zone": "Hazaribagh NH2", "score": 52, "evs": "1.9K", "roi": "★★"}
+    ],
+    "hourly_demand": [12,7,5,9,20,34,46,48,34,28,40,62,72,60,48,42,52,68,72,60,46,34,24,14]
+  },
+  "Chhattisgarh": {
+    "evs_registered": 72000,
+    "active_chargers": 210,
+    "desert_zones": 68,
+    "growth_pct": 11,
+    "charger_growth": 60,
+    "priority_zones": [
+      {"zone": "Raipur VIP Rd", "score": 76, "evs": "5.8K", "roi": "★★★"},
+      {"zone": "Bhilai NH6", "score": 70, "evs": "4.6K", "roi": "★★★"},
+      {"zone": "Bilaspur NH200", "score": 62, "evs": "3.2K", "roi": "★★★"},
+      {"zone": "Durg Bypass", "score": 56, "evs": "2.4K", "roi": "★★"},
+      {"zone": "Korba NH111", "score": 48, "evs": "1.6K", "roi": "★★"}
+    ],
+    "hourly_demand": [10,6,4,8,16,28,40,42,30,24,34,54,64,52,42,36,46,60,64,52,40,30,20,12]
+  },
+  "Uttarakhand": {
+    "evs_registered": 82000,
+    "active_chargers": 290,
+    "desert_zones": 58,
+    "growth_pct": 15,
+    "charger_growth": 85,
+    "priority_zones": [
+      {"zone": "Dehradun Rajpur Rd", "score": 84, "evs": "7.2K", "roi": "★★★★"},
+      {"zone": "Haridwar NH58", "score": 76, "evs": "5.4K", "roi": "★★★"},
+      {"zone": "Haldwani Bypass", "score": 68, "evs": "3.8K", "roi": "★★★"},
+      {"zone": "Rishikesh NH7", "score": 62, "evs": "2.8K", "roi": "★★★"},
+      {"zone": "Rudrapur NH87", "score": 56, "evs": "2.0K", "roi": "★★"}
+    ],
+    "hourly_demand": [14,8,6,10,22,36,48,50,36,30,42,64,74,62,50,44,54,70,74,62,48,36,26,16]
+  },
+  "Himachal Pradesh": {
+    "evs_registered": 48000,
+    "active_chargers": 180,
+    "desert_zones": 62,
+    "growth_pct": 14,
+    "charger_growth": 55,
+    "priority_zones": [
+      {"zone": "Shimla Mall Rd", "score": 78, "evs": "4.8K", "roi": "★★★★"},
+      {"zone": "Dharamshala NH503", "score": 70, "evs": "3.2K", "roi": "★★★"},
+      {"zone": "Manali NH3", "score": 64, "evs": "2.4K", "roi": "★★★"},
+      {"zone": "Solan NH5", "score": 58, "evs": "1.8K", "roi": "★★"},
+      {"zone": "Kullu Bypass", "score": 52, "evs": "1.4K", "roi": "★★"}
+    ],
+    "hourly_demand": [10,6,4,7,16,28,38,40,28,24,32,52,62,50,40,34,44,58,62,50,38,28,18,12]
+  },
+  "Goa": {
+    "evs_registered": 42000,
+    "active_chargers": 160,
+    "desert_zones": 15,
+    "growth_pct": 26,
+    "charger_growth": 65,
+    "priority_zones": [
+      {"zone": "Panjim NH66", "score": 86, "evs": "5.2K", "roi": "★★★★"},
+      {"zone": "Margao KTC", "score": 78, "evs": "3.8K", "roi": "★★★★"},
+      {"zone": "Vasco NH17A", "score": 72, "evs": "2.8K", "roi": "★★★"},
+      {"zone": "Mapusa NH17", "score": 64, "evs": "2.0K", "roi": "★★★"},
+      {"zone": "Ponda NH4A", "score": 56, "evs": "1.4K", "roi": "★★"}
+    ],
+    "hourly_demand": [16,9,7,11,24,40,54,56,40,34,46,70,80,68,56,50,60,76,80,68,54,40,28,18]
+  },
+  "Andhra Pradesh": {
+    "evs_registered": 280000,
+    "active_chargers": 820,
+    "desert_zones": 58,
+    "growth_pct": 19,
+    "charger_growth": 240,
+    "priority_zones": [
+      {"zone": "Visakhapatnam NH16", "score": 90, "evs": "14.2K", "roi": "★★★★★"},
+      {"zone": "Vijayawada NH65", "score": 84, "evs": "10.8K", "roi": "★★★★"},
+      {"zone": "Tirupati NH71", "score": 78, "evs": "8.2K", "roi": "★★★★"},
+      {"zone": "Guntur NH5", "score": 72, "evs": "6.0K", "roi": "★★★"},
+      {"zone": "Nellore NH16", "score": 64, "evs": "4.2K", "roi": "★★★"}
+    ],
+    "hourly_demand": [20,12,9,14,28,46,60,62,46,40,54,80,90,78,64,58,70,86,90,78,62,48,34,22]
+  },
+  "Manipur": {
+    "evs_registered": 18000,
+    "active_chargers": 35,
+    "desert_zones": 42,
+    "growth_pct": 8,
+    "charger_growth": 12,
+    "priority_zones": [
+      {"zone": "Imphal NH2", "score": 68, "evs": "2.4K", "roi": "★★★"},
+      {"zone": "Thoubal NH102", "score": 56, "evs": "1.4K", "roi": "★★"},
+      {"zone": "Bishnupur NH150", "score": 48, "evs": "0.9K", "roi": "★★"},
+      {"zone": "Churachandpur", "score": 40, "evs": "0.6K", "roi": "★"},
+      {"zone": "Ukhrul NH202", "score": 34, "evs": "0.4K", "roi": "★"}
+    ],
+    "hourly_demand": [6,3,2,4,10,18,26,28,20,16,22,36,44,36,28,24,30,40,44,36,26,18,12,8]
+  },
+  "Meghalaya": {
+    "evs_registered": 22000,
+    "active_chargers": 45,
+    "desert_zones": 38,
+    "growth_pct": 9,
+    "charger_growth": 15,
+    "priority_zones": [
+      {"zone": "Shillong NH40", "score": 72, "evs": "3.0K", "roi": "★★★"},
+      {"zone": "Tura NH51", "score": 58, "evs": "1.6K", "roi": "★★"},
+      {"zone": "Jowai NH44", "score": 50, "evs": "1.0K", "roi": "★★"},
+      {"zone": "Nongpoh NH6", "score": 44, "evs": "0.7K", "roi": "★"},
+      {"zone": "Williamnagar", "score": 36, "evs": "0.4K", "roi": "★"}
+    ],
+    "hourly_demand": [6,4,3,5,12,20,28,30,22,18,24,40,48,40,30,26,32,44,48,40,28,20,14,8]
+  },
+  "Tripura": {
+    "evs_registered": 16000,
+    "active_chargers": 30,
+    "desert_zones": 35,
+    "growth_pct": 7,
+    "charger_growth": 10,
+    "priority_zones": [
+      {"zone": "Agartala NH8", "score": 66, "evs": "2.2K", "roi": "★★★"},
+      {"zone": "Udaipur NH44", "score": 54, "evs": "1.2K", "roi": "★★"},
+      {"zone": "Dharmanagar", "score": 46, "evs": "0.8K", "roi": "★★"},
+      {"zone": "Kailashahar", "score": 38, "evs": "0.5K", "roi": "★"},
+      {"zone": "Ambassa NH8", "score": 32, "evs": "0.3K", "roi": "★"}
+    ],
+    "hourly_demand": [5,3,2,4,9,16,24,26,18,14,20,34,42,34,26,22,28,38,42,34,24,16,10,6]
+  },
+  "Nagaland": {
+    "evs_registered": 14000,
+    "active_chargers": 25,
+    "desert_zones": 40,
+    "growth_pct": 6,
+    "charger_growth": 8,
+    "priority_zones": [
+      {"zone": "Dimapur NH29", "score": 64, "evs": "1.8K", "roi": "★★★"},
+      {"zone": "Kohima NH29", "score": 54, "evs": "1.2K", "roi": "★★"},
+      {"zone": "Mokokchung", "score": 44, "evs": "0.6K", "roi": "★"},
+      {"zone": "Tuensang", "score": 36, "evs": "0.4K", "roi": "★"},
+      {"zone": "Mon NH702", "score": 30, "evs": "0.2K", "roi": "★"}
+    ],
+    "hourly_demand": [4,2,2,3,8,14,22,24,16,12,18,30,38,30,24,20,26,34,38,30,22,14,8,5]
+  },
+  "Mizoram": {
+    "evs_registered": 12000,
+    "active_chargers": 22,
+    "desert_zones": 36,
+    "growth_pct": 7,
+    "charger_growth": 8,
+    "priority_zones": [
+      {"zone": "Aizawl NH54", "score": 62, "evs": "1.6K", "roi": "★★★"},
+      {"zone": "Lunglei NH54A", "score": 50, "evs": "0.9K", "roi": "★★"},
+      {"zone": "Champhai", "score": 42, "evs": "0.5K", "roi": "★"},
+      {"zone": "Serchhip", "score": 36, "evs": "0.3K", "roi": "★"},
+      {"zone": "Kolasib NH54", "score": 30, "evs": "0.2K", "roi": "★"}
+    ],
+    "hourly_demand": [4,2,2,3,7,12,20,22,14,10,16,28,36,28,22,18,24,32,36,28,20,12,8,4]
+  },
+  "Arunachal Pradesh": {
+    "evs_registered": 10000,
+    "active_chargers": 18,
+    "desert_zones": 45,
+    "growth_pct": 5,
+    "charger_growth": 6,
+    "priority_zones": [
+      {"zone": "Itanagar NH415", "score": 60, "evs": "1.4K", "roi": "★★★"},
+      {"zone": "Naharlagun", "score": 50, "evs": "0.8K", "roi": "★★"},
+      {"zone": "Pasighat NH52", "score": 42, "evs": "0.5K", "roi": "★"},
+      {"zone": "Tawang", "score": 34, "evs": "0.3K", "roi": "★"},
+      {"zone": "Bomdila NH13", "score": 28, "evs": "0.2K", "roi": "★"}
+    ],
+    "hourly_demand": [3,2,1,3,6,10,18,20,12,8,14,24,32,24,18,14,20,28,32,24,18,10,6,4]
+  },
+  "Sikkim": {
+    "evs_registered": 15000,
+    "active_chargers": 40,
+    "desert_zones": 22,
+    "growth_pct": 13,
+    "charger_growth": 14,
+    "priority_zones": [
+      {"zone": "Gangtok NH10", "score": 74, "evs": "2.6K", "roi": "★★★"},
+      {"zone": "Namchi NH510", "score": 60, "evs": "1.4K", "roi": "★★"},
+      {"zone": "Rangpo NH10", "score": 52, "evs": "0.9K", "roi": "★★"},
+      {"zone": "Mangan NH31A", "score": 44, "evs": "0.5K", "roi": "★"},
+      {"zone": "Singtam", "score": 38, "evs": "0.3K", "roi": "★"}
+    ],
+    "hourly_demand": [6,3,2,4,10,18,26,28,20,16,22,36,44,36,28,24,30,40,44,36,26,18,12,6]
+  },
+  "Jammu and Kashmir": {
+    "evs_registered": 55000,
+    "active_chargers": 150,
+    "desert_zones": 58,
+    "growth_pct": 12,
+    "charger_growth": 45,
+    "priority_zones": [
+      {"zone": "Srinagar NH1A", "score": 78, "evs": "5.2K", "roi": "★★★★"},
+      {"zone": "Jammu NH44", "score": 72, "evs": "4.0K", "roi": "★★★"},
+      {"zone": "Anantnag NH44", "score": 62, "evs": "2.4K", "roi": "★★★"},
+      {"zone": "Udhampur NH1A", "score": 56, "evs": "1.8K", "roi": "★★"},
+      {"zone": "Kathua NH1A", "score": 48, "evs": "1.2K", "roi": "★★"}
+    ],
+    "hourly_demand": [10,6,4,7,16,28,38,40,28,24,32,52,62,50,40,34,44,58,62,50,38,28,18,12]
+  },
+  "Ladakh": {
+    "evs_registered": 5000,
+    "active_chargers": 12,
+    "desert_zones": 18,
+    "growth_pct": 8,
+    "charger_growth": 4,
+    "priority_zones": [
+      {"zone": "Leh NH1", "score": 58, "evs": "0.8K", "roi": "★★"},
+      {"zone": "Kargil NH1", "score": 46, "evs": "0.4K", "roi": "★"},
+      {"zone": "Diskit Nubra", "score": 36, "evs": "0.2K", "roi": "★"},
+      {"zone": "Zanskar", "score": 28, "evs": "0.1K", "roi": "★"},
+      {"zone": "Nyoma", "score": 22, "evs": "0.1K", "roi": "★"}
+    ],
+    "hourly_demand": [2,1,1,2,4,8,14,16,10,6,10,18,24,18,14,10,16,22,24,18,14,8,4,2]
+  },
+  "Chandigarh": {
+    "evs_registered": 45000,
+    "active_chargers": 190,
+    "desert_zones": 8,
+    "growth_pct": 22,
+    "charger_growth": 65,
+    "priority_zones": [
+      {"zone": "Sector 17 Plaza", "score": 92, "evs": "6.8K", "roi": "★★★★★"},
+      {"zone": "IT Park Sec 13", "score": 86, "evs": "5.2K", "roi": "★★★★"},
+      {"zone": "Industrial Area Ph1", "score": 78, "evs": "3.6K", "roi": "★★★★"},
+      {"zone": "Manimajra NH5", "score": 70, "evs": "2.4K", "roi": "★★★"},
+      {"zone": "Sector 43 ISBT", "score": 64, "evs": "1.8K", "roi": "★★★"}
+    ],
+    "hourly_demand": [18,10,8,12,26,44,58,60,44,38,50,76,86,74,60,54,66,82,86,74,58,44,30,20]
+  }
+}

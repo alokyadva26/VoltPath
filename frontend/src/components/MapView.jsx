@@ -7,6 +7,7 @@ import "leaflet/dist/leaflet.css";
 const chargerIcon = new L.DivIcon({
   html: "<div style='font-size:30px'>⚡</div>",
   iconSize: [30, 30],
+  iconAnchor: [15, 15],
   className: ""
 });
 
@@ -14,6 +15,7 @@ const chargerIcon = new L.DivIcon({
 const originIcon = new L.DivIcon({
   html: "<div style='font-size:26px'>🟢</div>",
   iconSize: [26, 26],
+  iconAnchor: [13, 13],
   className: ""
 });
 
@@ -21,6 +23,7 @@ const originIcon = new L.DivIcon({
 const destinationIcon = new L.DivIcon({
   html: "<div style='font-size:26px'>📍</div>",
   iconSize: [26, 26],
+  iconAnchor: [13, 24],
   className: ""
 });
 
@@ -40,12 +43,15 @@ function FitBounds({ positions }) {
 
 export default function MapView({ route }) {
 
+  console.log("MapView received route:", route);
+
   let routePositions = [];
 
   if (
-  route?.geometry?.coordinates &&
-  route.geometry.coordinates.length > 0
-) {
+    route?.geometry?.coordinates &&
+    route.geometry.coordinates.length > 0
+  ) {
+    // GeoJSON is [lng, lat] → Leaflet needs [lat, lng]
     routePositions = route.geometry.coordinates.map(coord => [
       coord[1],
       coord[0]
@@ -54,6 +60,7 @@ export default function MapView({ route }) {
 
   const chargers = route?.chargers_along_route || [];
 
+  // First and last point of the route polyline
   const origin = routePositions.length > 0 ? routePositions[0] : null;
   const destination =
     routePositions.length > 0
@@ -101,23 +108,21 @@ export default function MapView({ route }) {
         </Marker>
       )}
 
-      {/* Chargers */}
-      {origin &&
-  chargers.map((c, i) => (
-    <Marker
-      key={i}
-      position={[
-        origin[0] + (i + 1) * 0.03,
-        origin[1] + (i + 1) * 0.03
-      ]}
-      icon={chargerIcon}
-    >
-          <Popup>
-            <b>{c.name}</b>
-            <br />
-            Power: {c.power_kw} kW
-          </Popup>
-        </Marker>
+      {/* Chargers — use actual lat/lng from backend */}
+      {chargers.map((c, i) => (
+        c.lat && c.lng ? (
+          <Marker
+            key={c.id || i}
+            position={[c.lat, c.lng]}
+            icon={chargerIcon}
+          >
+            <Popup>
+              <b>{c.name}</b>
+              <br />
+              Power: {c.power_kw} kW
+            </Popup>
+          </Marker>
+        ) : null
       ))}
 
     </MapContainer>

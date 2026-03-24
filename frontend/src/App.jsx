@@ -429,6 +429,16 @@ export default function VoltPath() {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState("route");
 
+// Geocode a place name to [lat, lng] using OpenStreetMap Nominatim
+async function geocode(place) {
+  const res = await fetch(
+    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(place)}`
+  );
+  const data = await res.json();
+  if (!data.length) throw new Error(`Location not found: "${place}"`);
+  return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+}
+
 const handlePlanRoute = async () => {
 
   if (!origin || !destination) {
@@ -442,15 +452,25 @@ const handlePlanRoute = async () => {
 
   try {
 
-    // Temporary coordinates (later we will add geocoding)
+    // Geocode user-entered place names to coordinates
+    console.log("Geocoding origin:", origin);
+    const originCoords = await geocode(origin);
+    console.log("Origin coords:", originCoords);
+
+    console.log("Geocoding destination:", destination);
+    const destinationCoords = await geocode(destination);
+    console.log("Destination coords:", destinationCoords);
+
     const payload = {
       vehicle: vehicle.id,
       soc: soc,
-      origin: [28.6139, 77.2090],       // Delhi
-      destination: [28.5355, 77.3910]   // Noida
+      origin: originCoords,
+      destination: destinationCoords
     };
 
-    const res = await fetch("http://localhost:8000/route", {
+    console.log("Sending route request with payload:", payload);
+
+    const res = await fetch("http://127.0.0.1:8000/route", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -464,12 +484,14 @@ const handlePlanRoute = async () => {
 
     const data = await res.json();
 
+    console.log("Route API response:", data);
+
     setRouteResult(data);
 
   } catch (err) {
 
     console.error("Route API error:", err);
-    setError("Failed to compute route. Is the backend running?");
+    setError(err.message || "Failed to compute route. Is the backend running?");
 
   } finally {
 
@@ -1163,10 +1185,14 @@ const handlePlanRoute = async () => {
       )}
 
       {activeTab === "dashboard" && (
+        <DashboardPanel />
+      )}
+
+      {activeTab === "v2g" && (
         <div
           style={{
             padding: 32,
-            maxWidth: 900,
+            maxWidth: 700,
             margin: "0 auto",
             width: "100%",
           }}
@@ -1180,13 +1206,203 @@ const handlePlanRoute = async () => {
                 marginBottom: 6,
               }}
             >
-              Policy Dashboard
+              V2G Earnings Simulator
             </h1>
             <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14 }}>
-              EV infrastructure analytics · Delhi NCR · H3 Hex Coverage
+              Vehicle-to-Grid revenue simulation for fleet operators
             </p>
           </div>
+          <V2GSimulator />
+        </div>
+      )}
+    </div>
+  );
+}
 
+function DashboardPanel() {
+  const [states, setStates] = useState([]);
+  const [selectedState, setSelectedState] = useState("Delhi");
+  const [policyData, setPolicyData] = useState(null);
+  const [forecastData, setForecastData] = useState(null);
+  const [dashLoading, setDashLoading] = useState(false);
+
+  // Fetch state list on mount
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/policy/states")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.states) setStates(d.states);
+      })
+      .catch((err) => console.error("Failed to load states:", err));
+  }, []);
+
+  // Fetch policy data when state changes
+  useEffect(() => {
+    setDashLoading(true);
+    fetch(`http://127.0.0.1:8000/policy?state=${encodeURIComponent(selectedState)}`)
+      .then((r) => r.json())
+      .then((d) => {
+        console.log("Policy data:", d);
+        setPolicyData(d);
+      })
+      .catch((err) => console.error("Policy fetch error:", err))
+      .finally(() => setDashLoading(false));
+  }, [selectedState]);
+
+  // Fetch XGBoost forecast when state changes
+  useEffect(() => {
+    fetch(`http://127.0.0.1:8000/forecast?state=${encodeURIComponent(selectedState)}`)
+      .then((r) => r.json())
+      .then((d) => {
+        console.log("Forecast data:", d);
+        setForecastData(d);
+      })
+      .catch((err) => console.error("Forecast fetch error:", err));
+  }, [selectedState]);
+
+  const formatNum = (n) => {
+    if (n >= 1000000) return (n / 1000000).toFixed(1) + "M";
+    if (n >= 1000) return (n / 1000).toFixed(1) + "K";
+    return n.toString();
+  };
+
+  const cards = policyData
+    ? [
+        {
+          label: "EVs Registered",
+          value: formatNum(policyData.evs_registered),
+          delta: `+${policyData.growth_pct}% YoY`,
+          c: "#00c4ff",
+        },
+        {
+          label: "Active Chargers",
+          value: formatNum(policyData.active_chargers),
+          delta: `+${policyData.charger_growth} this year`,
+          c: "#22d3a5",
+        },
+        {
+          label: "Vehicle:Charger",
+          value: `${policyData.vehicle_charger_ratio}:1`,
+          delta: policyData.vehicle_charger_ratio > 200 ? "⚠ Above target" : "✓ On track",
+          c: "#f59e0b",
+        },
+        {
+          label: "Charging Deserts",
+          value: `${policyData.desert_zones} zones`,
+          delta: selectedState,
+          c: "#ef4444",
+        },
+      ]
+    : [];
+
+  return (
+    <div
+      style={{
+        padding: 32,
+        maxWidth: 900,
+        margin: "0 auto",
+        width: "100%",
+      }}
+    >
+      {/* Header + State Selector */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          marginBottom: 32,
+          flexWrap: "wrap",
+          gap: 16,
+        }}
+      >
+        <div>
+          <h1
+            style={{
+              fontSize: 26,
+              fontWeight: 700,
+              letterSpacing: "-0.03em",
+              marginBottom: 6,
+            }}
+          >
+            Policy Dashboard
+          </h1>
+          <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14 }}>
+            EV infrastructure analytics · {selectedState} · Real-time data
+          </p>
+        </div>
+
+        <div style={{ position: "relative" }}>
+          <div
+            style={{
+              fontSize: 10,
+              color: "rgba(255,255,255,0.3)",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              marginBottom: 6,
+            }}
+          >
+            Select State
+          </div>
+          <select
+            value={selectedState}
+            onChange={(e) => setSelectedState(e.target.value)}
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.15)",
+              borderRadius: 10,
+              padding: "10px 36px 10px 14px",
+              color: "#e2e8f0",
+              fontSize: 14,
+              fontWeight: 600,
+              cursor: "pointer",
+              appearance: "none",
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 5l3 3 3-3' stroke='%2322d3a5' stroke-width='1.5' fill='none'/%3E%3C/svg%3E\")",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "right 12px center",
+              minWidth: 180,
+              transition: "border-color 0.2s",
+            }}
+            onFocus={(e) => (e.target.style.borderColor = "rgba(34,211,165,0.5)")}
+            onBlur={(e) => (e.target.style.borderColor = "rgba(255,255,255,0.15)")}
+          >
+            {states.map((s) => (
+              <option key={s} value={s} style={{ background: "#0a1628", color: "#e2e8f0" }}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Loading shimmer */}
+      {dashLoading && (
+        <div
+          style={{
+            textAlign: "center",
+            padding: "40px 0",
+            color: "rgba(255,255,255,0.3)",
+            fontSize: 13,
+          }}
+        >
+          <div
+            style={{
+              width: 28,
+              height: 28,
+              border: "2px solid rgba(34,211,165,0.2)",
+              borderTopColor: "#22d3a5",
+              borderRadius: "50%",
+              animation: "spin 0.9s linear infinite",
+              margin: "0 auto 12px",
+            }}
+          />
+          Loading {selectedState} data...
+        </div>
+      )}
+
+      {/* Stat Cards */}
+      {!dashLoading && policyData && (
+        <>
           <div
             style={{
               display: "grid",
@@ -1195,14 +1411,10 @@ const handlePlanRoute = async () => {
               marginBottom: 28,
             }}
           >
-            {[
-              { label: "EVs Registered", value: "3.3M", delta: "+18%", c: "#00c4ff" },
-              { label: "Active Chargers", value: "12,000", delta: "+340", c: "#22d3a5" },
-              { label: "Vehicle:Charger", value: "275:1", delta: "↓ from 290:1", c: "#f59e0b" },
-              { label: "Charging Deserts", value: "47 zones", delta: "Delhi NCR", c: "#ef4444" },
-            ].map(({ label, value, delta, c }) => (
+            {cards.map(({ label, value, delta, c }) => (
               <div
                 key={label}
+                className="route-card"
                 style={{
                   background: "rgba(255,255,255,0.04)",
                   border: "1px solid rgba(255,255,255,0.07)",
@@ -1239,11 +1451,10 @@ const handlePlanRoute = async () => {
             ))}
           </div>
 
-          <div
-            style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}
-          >
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
             {/* Demand chart */}
             <div
+              className="route-card"
               style={{
                 background: "rgba(255,255,255,0.03)",
                 border: "1px solid rgba(255,255,255,0.07)",
@@ -1268,41 +1479,47 @@ const handlePlanRoute = async () => {
                   marginBottom: 16,
                 }}
               >
-                XGBoost model · Delhi NCR · Today
+                XGBoost model{forecastData?.model ? ` · R²=${forecastData.model.r2}` : ""} · {selectedState} · {forecastData?.day || "Today"}
               </div>
-              <svg viewBox="0 0 300 140" style={{ width: "100%" }}>
-                {[30, 18, 14, 20, 38, 55, 70, 68, 52, 45, 60, 90, 100, 88, 72, 65, 78, 95, 100, 88, 70, 55, 42, 32].map(
-                  (v, i) => (
-                    <g key={i}>
-                      <rect
-                        x={i * 12.2 + 2}
-                        y={140 - v * 1.3}
-                        width={9}
-                        height={v * 1.3}
-                        rx={2}
-                        fill={v >= 88 ? "#ef4444" : v >= 65 ? "#f59e0b" : "#22d3a5"}
-                        opacity={0.75}
-                      />
-                    </g>
-                  )
-                )}
-                <text x={5} y={135} fill="rgba(255,255,255,0.3)" fontSize={8}>
-                  12am
-                </text>
-                <text x={130} y={135} fill="rgba(255,255,255,0.3)" fontSize={8}>
-                  12pm
-                </text>
-                <text x={255} y={135} fill="rgba(255,255,255,0.3)" fontSize={8}>
-                  11pm
-                </text>
-                <text x={200} y={20} fill="#ef4444" fontSize={8}>
-                  Peak 7-9 PM ↑
-                </text>
-              </svg>
+              {(() => {
+                const demandArr = forecastData?.demand || policyData.hourly_demand || [];
+                const maxVal = Math.max(...demandArr, 1);
+                const peakHour = demandArr.indexOf(Math.max(...demandArr));
+                return (
+                  <svg viewBox="0 0 300 155" style={{ width: "100%" }}>
+                    {demandArr.map((v, i) => {
+                      const pct = v / maxVal;
+                      const barH = pct * 120;
+                      return (
+                        <g key={i}>
+                          <rect
+                            x={i * 12.2 + 2}
+                            y={130 - barH}
+                            width={9}
+                            height={barH}
+                            rx={2}
+                            fill={pct >= 0.88 ? "#ef4444" : pct >= 0.65 ? "#f59e0b" : "#22d3a5"}
+                            opacity={0.8}
+                          />
+                          {i % 6 === 0 && (
+                            <text x={i * 12.2 + 3} y={145} fill="rgba(255,255,255,0.3)" fontSize={7}>
+                              {i === 0 ? "12am" : i === 6 ? "6am" : i === 12 ? "12pm" : "6pm"}
+                            </text>
+                          )}
+                        </g>
+                      );
+                    })}
+                    <text x={peakHour * 12.2 - 20} y={15} fill="#ef4444" fontSize={8} fontWeight="600">
+                      Peak: {Math.max(...demandArr)} sessions
+                    </text>
+                  </svg>
+                );
+              })()}
             </div>
 
-            {/* Priority table */}
+            {/* Priority Zones */}
             <div
+              className="route-card"
               style={{
                 background: "rgba(255,255,255,0.03)",
                 border: "1px solid rgba(255,255,255,0.07)",
@@ -1327,15 +1544,9 @@ const handlePlanRoute = async () => {
                   marginBottom: 16,
                 }}
               >
-                OR-Tools optimization · Top locations
+                OR-Tools optimization · {selectedState}
               </div>
-              {[
-                { zone: "Dwarka Sector 21", score: 97, evs: "18.2K", roi: "★★★★★" },
-                { zone: "Gurgaon Cyber City", score: 94, evs: "16.8K", roi: "★★★★★" },
-                { zone: "Noida Sector 62", score: 89, evs: "14.1K", roi: "★★★★" },
-                { zone: "Faridabad NH48", score: 82, evs: "11.3K", roi: "★★★★" },
-                { zone: "Rohini Sector 3", score: 77, evs: "9.6K", roi: "★★★" },
-              ].map(({ zone, score, evs, roi }, i) => (
+              {(policyData.priority_zones || []).map(({ zone, score, evs, roi }, i) => (
                 <div
                   key={zone}
                   style={{
@@ -1343,8 +1554,7 @@ const handlePlanRoute = async () => {
                     alignItems: "center",
                     gap: 10,
                     padding: "8px 0",
-                    borderBottom:
-                      i < 4 ? "1px solid rgba(255,255,255,0.05)" : "none",
+                    borderBottom: i < 4 ? "1px solid rgba(255,255,255,0.05)" : "none",
                   }}
                 >
                   <div
@@ -1352,8 +1562,7 @@ const handlePlanRoute = async () => {
                       width: 22,
                       height: 22,
                       borderRadius: 6,
-                      background:
-                        i === 0 ? "rgba(34,211,165,0.15)" : "rgba(255,255,255,0.05)",
+                      background: i === 0 ? "rgba(34,211,165,0.15)" : "rgba(255,255,255,0.05)",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -1379,12 +1588,7 @@ const handlePlanRoute = async () => {
                     >
                       {zone}
                     </div>
-                    <div
-                      style={{
-                        fontSize: 10,
-                        color: "rgba(255,255,255,0.3)",
-                      }}
-                    >
+                    <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>
                       {evs} EVs registered nearby
                     </div>
                   </div>
@@ -1405,35 +1609,7 @@ const handlePlanRoute = async () => {
               ))}
             </div>
           </div>
-        </div>
-      )}
-
-      {activeTab === "v2g" && (
-        <div
-          style={{
-            padding: 32,
-            maxWidth: 700,
-            margin: "0 auto",
-            width: "100%",
-          }}
-        >
-          <div style={{ marginBottom: 32 }}>
-            <h1
-              style={{
-                fontSize: 26,
-                fontWeight: 700,
-                letterSpacing: "-0.03em",
-                marginBottom: 6,
-              }}
-            >
-              V2G Earnings Simulator
-            </h1>
-            <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 14 }}>
-              Vehicle-to-Grid revenue simulation for fleet operators
-            </p>
-          </div>
-          <V2GSimulator />
-        </div>
+        </>
       )}
     </div>
   );
