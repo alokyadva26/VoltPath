@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import MapView from "./components/MapView";
+import CoverageHeatmap from "./components/CoverageHeatmap";
 
 const VEHICLES = [
   { id: "nexon_ev", name: "Tata Nexon EV", range: 300, battery: 40.5, icon: "🚗", color: "#00c4ff" },
@@ -1608,6 +1609,39 @@ function DashboardPanel() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Coverage Gap Heatmap */}
+          <div
+            className="route-card"
+            style={{
+              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.07)",
+              borderRadius: 16,
+              padding: 20,
+              marginTop: 20,
+            }}
+          >
+            <div
+              style={{
+                fontSize: 13,
+                fontWeight: 600,
+                marginBottom: 4,
+                color: "#e2e8f0",
+              }}
+            >
+              EV Charging Coverage Gap Heatmap
+            </div>
+            <div
+              style={{
+                fontSize: 11,
+                color: "rgba(255,255,255,0.3)",
+                marginBottom: 16,
+              }}
+            >
+              Geographic view · Higher score = more underserved
+            </div>
+            <CoverageHeatmap />
           </div>
         </>
       )}
