@@ -1,0 +1,20 @@
+[
+  {
+    "id": "nexon_ev",
+    "name": "Tata Nexon EV",
+    "range_km": 300,
+    "battery_kwh": 40.5
+  },
+  {
+    "id": "tiago_ev",
+    "name": "Tata Tiago EV",
+    "range_km": 220,
+    "battery_kwh": 24
+  },
+  {
+    "id": "mg_zs",
+    "name": "MG ZS EV",
+    "range_km": 325,
+    "battery_kwh": 50
+  }
+]

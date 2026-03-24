@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Connaught Place Charger",
+    "lat": 28.6315,
+    "lng": 77.2167,
+    "power_kw": 50
+  },
+  {
+    "id": 2,
+    "name": "Gurgaon Supercharger",
+    "lat": 28.4595,
+    "lng": 77.0266,
+    "power_kw": 60
+  },
+  {
+    "id": 3,
+    "name": "Noida Fast Charger",
+    "lat": 28.5355,
+    "lng": 77.3910,
+    "power_kw": 40
+  },
+  {
+    "id": 4,
+    "name": "Dwarka EV Station",
+    "lat": 28.5921,
+    "lng": 77.0460,
+    "power_kw": 50
+  }
+]
