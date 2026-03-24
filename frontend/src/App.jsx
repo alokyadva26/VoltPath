@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import MapView from "./components/MapView";
 
 const VEHICLES = [
   { id: "nexon_ev", name: "Tata Nexon EV", range: 300, battery: 40.5, icon: "🚗", color: "#00c4ff" },
@@ -1102,7 +1103,7 @@ const handlePlanRoute = async () => {
 
           {/* Map area */}
           <div style={{ flex: 1, position: "relative", background: "#0d1f35" }}>
-            <MapPlaceholder routeResult={routeResult} vehicle={vehicle} />
+            <MapView route={routeResult} vehicle={vehicle} />
 
             {!routeResult && !loading && (
               <div
