@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import MapView from "./components/MapView";
 import CoverageHeatmap from "./components/CoverageHeatmap";
-
+import CoverageAnalytics from "./components/CoverageAnalytics";
 const VEHICLES = [
   { id: "nexon_ev", name: "Tata Nexon EV", range: 300, battery: 40.5, icon: "🚗", color: "#00c4ff" },
   { id: "tiago_ev", name: "Tata Tiago EV", range: 220, battery: 24, icon: "🚙", color: "#39ff99" },
@@ -36,9 +36,9 @@ const MOCK_ROUTES = {
 };
 
 function AnxietyMeter({ soc, routeResult, loading }) {
-  const canvasRef = useRef(null);
+  const [displayPct, setDisplayPct] = useState(0);
   const animRef = useRef(null);
-  const currentAngleRef = useRef(-Math.PI);
+  const prevPctRef = useRef(0);
 
   const targetConfidence = routeResult
     ? routeResult.remaining_soc > 20
@@ -61,124 +61,178 @@ function AnxietyMeter({ soc, routeResult, loading }) {
   };
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    const W = canvas.width;
-    const H = canvas.height;
-    const cx = W / 2;
-    const cy = H * 0.72;
-    const R = Math.min(W, H) * 0.42;
-
-    const targetAngle = -Math.PI + (targetConfidence / 100) * Math.PI;
+    const from = prevPctRef.current;
+    const to = targetConfidence;
     let start = null;
+    const duration = loading ? 300 : 900;
 
-    const draw = (angle) => {
-      ctx.clearRect(0, 0, W, H);
-
-      // Track background
-      ctx.beginPath();
-      ctx.arc(cx, cy, R, -Math.PI, 0);
-      ctx.strokeStyle = "rgba(255,255,255,0.08)";
-      ctx.lineWidth = 18;
-      ctx.lineCap = "round";
-      ctx.stroke();
-
-      // Colored arc
-      const pct = ((angle + Math.PI) / Math.PI) * 100;
-      const color = getColor(pct);
-      ctx.beginPath();
-      ctx.arc(cx, cy, R, -Math.PI, angle);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 18;
-      ctx.lineCap = "round";
-      ctx.stroke();
-
-      // Tick marks
-      for (let i = 0; i <= 10; i++) {
-        const a = -Math.PI + (i / 10) * Math.PI;
-        const inner = R - 26;
-        const outer = R - 14;
-        ctx.beginPath();
-        ctx.moveTo(cx + Math.cos(a) * inner, cy + Math.sin(a) * inner);
-        ctx.lineTo(cx + Math.cos(a) * outer, cy + Math.sin(a) * outer);
-        ctx.strokeStyle = "rgba(255,255,255,0.2)";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      }
-
-      // Needle
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(angle);
-      ctx.beginPath();
-      ctx.moveTo(-6, 0);
-      ctx.lineTo(R - 30, 0);
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 2.5;
-      ctx.lineCap = "round";
-      ctx.stroke();
-      ctx.restore();
-
-      // Center dot
-      ctx.beginPath();
-      ctx.arc(cx, cy, 7, 0, Math.PI * 2);
-      ctx.fillStyle = "#ffffff";
-      ctx.fill();
-
-      // Percentage text
-      ctx.font = `bold ${W * 0.12}px 'DM Mono', monospace`;
-      ctx.fillStyle = color;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.fillText(Math.round(pct) + "%", cx, cy - R * 0.28);
-
-      // Label
-      ctx.font = `500 ${W * 0.065}px sans-serif`;
-      ctx.fillStyle = "rgba(255,255,255,0.7)";
-      ctx.fillText(getLabel(pct), cx, cy - R * 0.28 + W * 0.1);
-
-      // Zone labels
-      ctx.font = `${W * 0.045}px sans-serif`;
-      ctx.fillStyle = "#ef4444";
-      ctx.textAlign = "left";
-      ctx.fillText("Anxious", cx - R - 2, cy + 14);
-      ctx.fillStyle = "#22d3a5";
-      ctx.textAlign = "right";
-      ctx.fillText("Confident", cx + R + 2, cy + 14);
-    };
-
-    const animate = (ts) => {
+    const tick = (ts) => {
       if (!start) start = ts;
-      const elapsed = ts - start;
-      const duration = loading ? 300 : 900;
-      const progress = Math.min(elapsed / duration, 1);
+      const progress = Math.min((ts - start) / duration, 1);
       const ease = 1 - Math.pow(1 - progress, 4);
-
-      const from = currentAngleRef.current;
-      const angle = from + (targetAngle - from) * ease;
-      draw(angle);
-
+      setDisplayPct(from + (to - from) * ease);
       if (progress < 1) {
-        animRef.current = requestAnimationFrame(animate);
+        animRef.current = requestAnimationFrame(tick);
       } else {
-        currentAngleRef.current = targetAngle;
+        prevPctRef.current = to;
       }
     };
 
     if (animRef.current) cancelAnimationFrame(animRef.current);
-    animRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animRef.current);
+    animRef.current = requestAnimationFrame(tick);
+    return () => { if (animRef.current) cancelAnimationFrame(animRef.current); };
   }, [targetConfidence, loading]);
 
+  // Geometry: semicircle arc
+  const W = 300;
+  const H = 180;
+  const cx = W / 2;
+  const cy = 155;
+  const R = 115;
+  const stroke = 16;
+
+  // Arc length for a semicircle
+  const arcLen = Math.PI * R;
+  const activeDash = (displayPct / 100) * arcLen;
+
+  // Polar helper — 180° is left, 0° is right
+  const pol = (deg, r) => ({
+    x: cx + r * Math.cos((deg * Math.PI) / 180),
+    y: cy + r * Math.sin((deg * Math.PI) / 180),
+  });
+
+  // Semicircle path (left to right, 180° → 0°)
+  const semiPath = `M ${cx - R} ${cy} A ${R} ${R} 0 0 1 ${cx + R} ${cy}`;
+
+  // Needle endpoint
+  const needleDeg = 180 - (displayPct / 100) * 180;
+  const nTip = pol(needleDeg, R - 26);
+
+  // Tick marks on the outer edge of the arc
+  const ticks = Array.from({ length: 11 }, (_, i) => {
+    const deg = 180 - (i / 10) * 180;
+    return { a: pol(deg, R + stroke / 2 + 2), b: pol(deg, R + stroke / 2 + 10) };
+  });
+
+  const color = getColor(displayPct);
+  const label = getLabel(displayPct);
+
   return (
-    <div style={{ textAlign: "center" }}>
-      <canvas
-        ref={canvasRef}
-        width={280}
-        height={160}
-        style={{ width: "100%", maxWidth: 280 }}
-      />
+    <div style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      width: "100%",
+      position: "relative",
+    }}>
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        style={{ width: "100%", maxWidth: 320 }}
+      >
+        <defs>
+          <linearGradient id="arcGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#ef4444" />
+            <stop offset="40%" stopColor="#f59e0b" />
+            <stop offset="100%" stopColor="#22d3a5" />
+          </linearGradient>
+        </defs>
+
+        {/* Background track */}
+        <path
+          d={semiPath}
+          fill="none"
+          stroke="rgba(255,255,255,0.07)"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+        />
+
+        {/* Faint full gradient hint */}
+        <path
+          d={semiPath}
+          fill="none"
+          stroke="url(#arcGrad)"
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          opacity="0.15"
+        />
+
+        {/* Active arc — single path, clipped by dasharray */}
+        {displayPct > 0.5 && (
+          <path
+            d={semiPath}
+            fill="none"
+            stroke={color}
+            strokeWidth={stroke}
+            strokeLinecap="round"
+            strokeDasharray={`${activeDash} ${arcLen}`}
+            style={{ filter: `drop-shadow(0 0 6px ${color}55)` }}
+          />
+        )}
+
+        {/* Tick marks — on the outside of the arc */}
+        {ticks.map((t, i) => (
+          <line
+            key={i}
+            x1={t.a.x} y1={t.a.y}
+            x2={t.b.x} y2={t.b.y}
+            stroke="rgba(255,255,255,0.18)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        ))}
+
+        {/* Needle — pivot is exactly at cx,cy */}
+        <line
+          x1={cx} y1={cy}
+          x2={nTip.x} y2={nTip.y}
+          stroke="#ffffff"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+        />
+
+        {/* Center hub */}
+        <circle cx={cx} cy={cy} r="7" fill="#1e293b" stroke="rgba(255,255,255,0.25)" strokeWidth="2" />
+        <circle cx={cx} cy={cy} r="3" fill="#ffffff" />
+
+        {/* Percentage text — centered in the arc */}
+        <text
+          x={cx} y={cy - 50}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill={color}
+          fontSize="30"
+          fontWeight="700"
+          fontFamily="'DM Mono', monospace"
+        >
+          {Math.round(displayPct)}%
+        </text>
+
+        {/* Status label */}
+        <text
+          x={cx} y={cy - 24}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill="rgba(255,255,255,0.55)"
+          fontSize="13"
+          fontWeight="500"
+        >
+          {label}
+        </text>
+      </svg>
+
+      {/* Zone labels evenly below the arc */}
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
+        width: "100%",
+        maxWidth: 290,
+        marginTop: 2,
+        padding: "0 8px",
+      }}>
+        <span style={{ fontSize: 10, color: "#ef4444", fontWeight: 600 }}>Anxious</span>
+        <span style={{ fontSize: 10, color: "#f59e0b", fontWeight: 600 }}>Neutral</span>
+        <span style={{ fontSize: 10, color: "#22d3a5", fontWeight: 600 }}>Confident</span>
+      </div>
     </div>
   );
 }
@@ -1643,6 +1697,8 @@ function DashboardPanel() {
             </div>
             <CoverageHeatmap />
           </div>
+
+          <CoverageAnalytics />
         </>
       )}
     </div>
