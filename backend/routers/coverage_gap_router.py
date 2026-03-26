@@ -62,9 +62,18 @@ def get_coverage_gap():
     data = load_policy_data()
     locations = []
 
+    from app.services.ev_data_service import get_real_ev_data
+    real_data_map = get_real_ev_data()
+
     for state, info in data.items():
-        evs = info["evs_registered"]
-        chargers = info["active_chargers"]
+        real_data = real_data_map.get(state)
+        if real_data:
+            evs = real_data["ev_count"]
+            chargers = real_data["chargers"]
+        else:
+            evs = info["evs_registered"]
+            chargers = info["active_chargers"]
+            
         gap_score = round(evs / chargers, 1) if chargers > 0 else 0
 
         lat, lng = STATE_COORDS.get(state, (20.5937, 78.9629))  # fallback: India center

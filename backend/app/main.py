@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routers import route_router, charger_router, policy_router, forecast_router, coverage_gap_router
+from routers import route_router, charger_router, policy_router, forecast_router, coverage_gap_router, analytics_router
 
 app = FastAPI(title="VoltPath API")
 
@@ -20,6 +20,7 @@ app.include_router(charger_router.router)
 app.include_router(policy_router.router)
 app.include_router(forecast_router.router)
 app.include_router(coverage_gap_router.router)
+app.include_router(analytics_router.router)
 
 
 @app.get("/")

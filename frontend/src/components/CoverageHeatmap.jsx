@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, CircleMarker, Tooltip, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import { useEffect, useState, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -20,14 +20,13 @@ function HeatLayer({ points }) {
     heatRef.current = L.heatLayer(points, {
       radius: 35,
       blur: 25,
-      maxZoom: 10,
+      maxZoom: 6,
       max: 1.0,
       gradient: {
-        0.0: "#22d3a5",
-        0.35: "#22d3a5",
-        0.5: "#f59e0b",
-        0.75: "#ef4444",
-        1.0: "#dc2626",
+        0.0: "#22c55e",
+        0.4: "#facc15",
+        0.7: "#f97316",
+        1.0: "#ef4444",
       },
     }).addTo(map);
 
@@ -41,13 +40,7 @@ function HeatLayer({ points }) {
   return null;
 }
 
-/* Color for gap score */
-function gapColor(score) {
-  if (score >= 400) return "#dc2626";
-  if (score >= 300) return "#ef4444";
-  if (score >= 200) return "#f59e0b";
-  return "#22d3a5";
-}
+
 
 /* Legend */
 function Legend() {
@@ -71,10 +64,10 @@ function Legend() {
         Coverage Gap Score
       </div>
       {[
-        { label: "Critical (400+)", color: "#dc2626" },
-        { label: "High (300–400)", color: "#ef4444" },
-        { label: "Medium (200–300)", color: "#f59e0b" },
-        { label: "Good (<200)", color: "#22d3a5" },
+        { label: "Critical (200+)", color: "#ef4444" },
+        { label: "High (150–200)", color: "#f97316" },
+        { label: "Medium (100–150)", color: "#facc15" },
+        { label: "Good (<100)", color: "#22c55e" },
       ].map(({ label, color }) => (
         <div key={label} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
           <div style={{ width: 12, height: 12, borderRadius: 3, background: color, flexShrink: 0 }} />
@@ -102,11 +95,8 @@ export default function CoverageHeatmap() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Find max gap score for normalizing heat intensities
-  const maxGap = Math.max(...locations.map((l) => l.gap_score), 1);
-
-  // [lat, lng, intensity] for the heat layer
-  const heatPoints = locations.map((l) => [l.lat, l.lng, l.gap_score / maxGap]);
+  // Normalize interval [0, 1] relative to threshold 200
+  const heatPoints = locations.map((l) => [l.lat, l.lng, Math.min(l.gap_score / 200, 1)]);
 
   return (
     <div style={{ position: "relative" }}>
@@ -149,40 +139,6 @@ export default function CoverageHeatmap() {
               />
 
               <HeatLayer points={heatPoints} />
-
-              {locations.map((loc) => (
-                <CircleMarker
-                  key={loc.state}
-                  center={[loc.lat, loc.lng]}
-                  radius={7}
-                  pathOptions={{
-                    color: gapColor(loc.gap_score),
-                    fillColor: gapColor(loc.gap_score),
-                    fillOpacity: 0.85,
-                    weight: 2,
-                  }}
-                >
-                  <Tooltip
-                    direction="top"
-                    offset={[0, -8]}
-                    opacity={0.95}
-                  >
-                    <div style={{ fontFamily: "'Inter', sans-serif", minWidth: 140 }}>
-                      <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 4 }}>{loc.state}</div>
-                      <div style={{ fontSize: 11, color: "#666", lineHeight: 1.5 }}>
-                        <div>
-                          Gap Score:{" "}
-                          <span style={{ fontWeight: 700, color: gapColor(loc.gap_score) }}>
-                            {loc.gap_score}
-                          </span>
-                        </div>
-                        <div>EVs: {loc.evs_registered.toLocaleString()}</div>
-                        <div>Chargers: {loc.active_chargers.toLocaleString()}</div>
-                      </div>
-                    </div>
-                  </Tooltip>
-                </CircleMarker>
-              ))}
             </MapContainer>
           </div>
           <Legend />

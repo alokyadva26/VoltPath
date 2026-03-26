@@ -24,8 +24,17 @@ def get_policy(state: str = Query(default="Delhi")):
 
     state_data = data[state]
 
-    evs = state_data["evs_registered"]
-    chargers = state_data["active_chargers"]
+    # Override with real dataset if available
+    from app.services.ev_data_service import get_real_ev_data
+    real_data = get_real_ev_data().get(state)
+    
+    if real_data:
+        evs = real_data["ev_count"]
+        chargers = real_data["chargers"]
+    else:
+        evs = state_data["evs_registered"]
+        chargers = state_data["active_chargers"]
+        
     ratio = round(evs / chargers) if chargers > 0 else 0
 
     return {
