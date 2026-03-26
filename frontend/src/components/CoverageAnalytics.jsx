@@ -71,10 +71,11 @@ export default function CoverageAnalytics() {
   };
 
   const renderRankingListItem = (item, type) => {
-    const isCritical = item.gap_score > 300;
-    const isMedium = item.gap_score > 150 && !isCritical;
+    const isCritical = item.gap_score >= 200;
+    const isHigh = item.gap_score >= 150 && !isCritical;
+    const isMedium = item.gap_score >= 100 && !isCritical && !isHigh;
     const gapColor = type === 'high' 
-      ? (isCritical ? "#ef4444" : "#f59e0b") 
+      ? (isCritical ? "#dc2626" : (isHigh ? "#ef4444" : "#f59e0b")) 
       : "#22d3a5";
 
     return (

@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import { Star } from "lucide-react";
 import MapView from "./components/MapView";
 import CoverageHeatmap from "./components/CoverageHeatmap";
 import CoverageAnalytics from "./components/CoverageAnalytics";
@@ -104,10 +105,6 @@ function AnxietyMeter({ soc, routeResult, loading }) {
   // Semicircle path (left to right, 180° → 0°)
   const semiPath = `M ${cx - R} ${cy} A ${R} ${R} 0 0 1 ${cx + R} ${cy}`;
 
-  // Needle endpoint
-  const needleDeg = 180 - (displayPct / 100) * 180;
-  const nTip = pol(needleDeg, R - 26);
-
   // Tick marks on the outer edge of the arc
   const ticks = Array.from({ length: 11 }, (_, i) => {
     const deg = 180 - (i / 10) * 180;
@@ -181,13 +178,17 @@ function AnxietyMeter({ soc, routeResult, loading }) {
           />
         ))}
 
-        {/* Needle — pivot is exactly at cx,cy */}
+        {/* Needle — pivot is exactly at cx,cy using CSS transform */}
         <line
           x1={cx} y1={cy}
-          x2={nTip.x} y2={nTip.y}
+          x2={cx} y2={cy - (R - 26)}
           stroke="#ffffff"
           strokeWidth="2.5"
           strokeLinecap="round"
+          style={{
+            transform: `rotate(${(displayPct / 100) * 180 - 90}deg)`,
+            transformOrigin: `${cx}px ${cy}px`
+          }}
         />
 
         {/* Center hub */}
@@ -473,6 +474,39 @@ function MapPlaceholder({ routeResult, vehicle }) {
     </div>
   );
 }
+
+/* Reusable UI Components */
+
+const StarRating = ({ score }) => {
+  let count = 1;
+  if (score >= 90) count = 5;
+  else if (score >= 80) count = 4;
+  else if (score >= 70) count = 3;
+  else if (score >= 60) count = 2;
+
+  return (
+    <div style={{ display: "flex", gap: "2px", justifyContent: "flex-end", marginTop: "4px" }}>
+      <style>{`
+        .roi-star { transition: filter 0.2s ease, transform 0.2s ease; cursor: default; }
+        .roi-star.filled:hover { filter: drop-shadow(0 0 5px rgba(250, 204, 21, 0.6)); transform: scale(1.15); }
+      `}</style>
+      {[...Array(5)].map((_, i) => {
+        const isFilled = i < count;
+        return (
+          <Star
+            key={i}
+            size={12}
+            className={`roi-star ${isFilled ? "filled" : ""}`}
+            style={{
+              color: isFilled ? "#facc15" : "#4b5563",
+              fill: isFilled ? "#facc15" : "transparent"
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+};
 
 export default function VoltPath() {
   const [vehicle, setVehicle] = useState(VEHICLES[0]);
@@ -1658,7 +1692,7 @@ function DashboardPanel() {
                     >
                       {score}
                     </div>
-                    <div style={{ fontSize: 9, color: "#f59e0b" }}>{roi}</div>
+                    <StarRating score={score} />
                   </div>
                 </div>
               ))}
